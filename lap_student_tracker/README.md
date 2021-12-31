@@ -35,7 +35,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 Please follow the tutorials I sent about installing and setting up postgres. Once done, please change the default password for the user postgres to "foo".
 
-```sudo -i -u postgres
+```
+sudo -i -u postgres
 psql
 ALTER USER postgres WITH password 'foo'
 ```
