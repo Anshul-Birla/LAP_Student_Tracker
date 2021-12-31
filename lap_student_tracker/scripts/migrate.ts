@@ -1,3 +1,5 @@
+// make sure to run this when you are in the lap_student_tracker directory in your command line
+
 const { Pool } = require('pg');
 const { migrate } = require('postgres-migrations');
 
@@ -14,7 +16,7 @@ const client = new Pool({
 
 const runMigration = async () => {
   try {
-    await migrate({ client }, '../migrations');
+    await migrate({ client }, './migrations');
     console.log("Migration Ran Succesfully")
   } catch (e) {
     console.log(e)
@@ -22,5 +24,3 @@ const runMigration = async () => {
 }
 
 runMigration().then(() => process.exit());
-// export {}
-// runMigration().then(() => process.exit())
