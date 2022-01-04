@@ -34,5 +34,4 @@ jobs:
           DB_HOST: "localhost"
           DB_PASS: "postgres"
       - name: Lint
-        working-directory: web
         run: npm run lint-check
