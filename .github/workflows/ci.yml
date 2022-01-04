@@ -1,0 +1,30 @@
+name: ci
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:13-alpine
+        env:
+          DB_USER: postgres
+          DB_PASS: postgres
+          POSTGRES_DB: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Clone
+        uses: actions/checkout@v2
+      - name: Install Dependencies
+        run: npm ci
+      - name: Test Unit Tests
+        run: npm run test
+      - name: Lint
+        working-directory: web
+        run: npm run lint-check
