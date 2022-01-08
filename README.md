@@ -4,41 +4,56 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 First run `npm install` to install all depedencies
 
-Run the development server:
+## Installing Postgres
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+If you do not have postgres installed, install it for your operating system. If on Mac, I recommend installing via [Homebrew](https://brew.sh/). On Linux, simply using the `apt` package manager should be good enough. If you need any help installing, please reach out. 
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Once installed, start the Postgres server. 
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+On MacOS:
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+`brew services start postgresql`
 
-Go through the files in the demo repo to get a sense of how the basic project is structured. If postgres and everything is set up correctly, running npm run test should pass the only test.
+On Linux:
 
-I only setup an example of API routes and the interaction with the backend. The frontend is a normal React application, which should not be too bad to work with since there is a lot of help available online.
+`sudo service postgresql start`
 
-## Learn More
+If these commmands do not work, please let me know. 
 
-To learn more about Next.js, take a look at the following resources:
+## Logging Into Postgres
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+To actually see the database and interact with it, we have to login to the `postgres` user. To do so, run `sudo -i -u postgres`. Then, run `psql`. If everything has been set up correctly, no errors should pop up. Running `\d` in the terminal should return a `No relations to display`. If this all works, everything is running correctly :). 
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Changing Passwords 
 
-## Setting up Postgres
-
-Please follow the tutorials I sent about installing and setting up postgres. Once done, please change the default password for the user postgres to "foo".
-
+We know have to change the default password to interact with it. If you followed the last step, your terminal is already in the right place. If you did not, run 
 ```
 sudo -i -u postgres
 psql
-ALTER USER postgres WITH password 'foo'
 ```
+to get your terminal in the right place. Finally, run the following command:
+`ALTER USER postgres WITH password '<password>';` replacing `<password>` with your desired password. Remember to not forget the semi-colon. The password does not have to be anything fancy (I made mine "foo"), but please do remember it. If it sucesfully created the password, the terminal should respond with `ALTER USER`. 
 
-NOTE: This is for people who do not have an empty password for their default postgres. If an empty password works, change the enviroment variable in .env.local to the empty string.
+## Enviroment Variables 
+
+After this is all done, make a file in the root directory of the project called `.env.local`. Once created, paste the following into it:
+`DB_PASS=<password>`
+Replace `<password>` with the password you set above. 
+
+## Migrations 
+
+For this project, we will be using database migrations to make sure everyones database is consistent with each other. We are using [postgres-migrations](https://www.npmjs.com/package/postgres-migrations) in order to do so. The documentation goes over the way we create the migration files. For our purposes, each migration files holds the SQL querires to edit our database. To run the migrations, we run the following command:
+
+`node scripts/migrate.ts`
+
+Make sure you are in the root directory for the project to be able to do this. 
+
+## Testing 
+
+Finally, we have one last command to run. Run 
+`npm run test` 
+which adds a user to our database. If it passes, you have set everything up correctly :). 
+
+## Misc. 
+
+Please do go about the files and take a look at how everything interacts, especially in the models, database, and pages directory. This should give you some helpful tips on getting started development. 
